@@ -4,6 +4,7 @@ const app = express()
 const server = http.createServer(app)
 const socket = require('socket.io')
 const cors = require('cors')
+const e = require('express')
 const io = socket(server,{
   cors:{
     origin: "*",
@@ -37,7 +38,7 @@ io.on('connection', (socket)=>{
         const items = Object.keys(foods)
         .map((key)=> `${key}: ${foods[key]}`)
         .join("\n")
-        socket.emit('response', `Available items\n ${items}\n select an option`)
+        socket.emit('response', `Available items.\n ${items}.\n Select an option`)
       }else if(Object.keys(foods).includes(msg)){
         //ordering a meal
         currentOrder.push(foods[msg])
@@ -68,6 +69,15 @@ io.on('connection', (socket)=>{
         currentOrder = []
       }
        
+      }else{
+        socket.emit("response", "Invalid Command!!")
+        socket.emit('welcome-msg', {
+          a : `Select 1 to place an order,\n
+            Select 99 to checkout order,\n
+          Select 98 to see order history,\n
+          Select 97 to see current order,\n
+          Select 0 to cancel order\n`
+      })
       }
 
     })
