@@ -60,6 +60,14 @@ io.on('connection', (socket)=>{
           socket.emit('response', `Here is your current order: \n${currentOrderString}`)
         }
         
+      }else if(msg == 0){
+        if(currentOrder.length === 0){
+          socket.emit('response', `You haven't placed an order yet.`)
+      }else if(currentOrder){ 
+        socket.emit('response', `Your order of ${currentOrder.join(", ")} has been cancelled.`)
+        currentOrder = []
+      }
+       
       }
 
     })
